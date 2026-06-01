@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { LayoutDashboard, BookOpen, ListChecks, Timer, RotateCw, Settings, FlaskConical, Link2, Activity } from "lucide-react";
+import { LayoutDashboard, BookOpen, ListChecks, Timer, RotateCw, Settings, Bookmark } from "lucide-react";
 
 const tabs = [
   { to: "/", label: "Home", icon: LayoutDashboard, end: true },
@@ -12,7 +12,8 @@ const tabs = [
 const moreLinks = [
   { to: "/diagnostic", label: "Diagnostic", short: "Diag" },
   { to: "/labs", label: "Labs", short: "Labs" },
-  { to: "/resources", label: "Resources", short: "Links" }
+  { to: "/resources", label: "Resources", short: "Links" },
+  { to: "/favorites", label: "Saved", short: "Saved" }
 ];
 
 export default function Layout() {

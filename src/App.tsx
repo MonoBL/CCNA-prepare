@@ -15,6 +15,7 @@ import ExamResult from "@/pages/ExamResult";
 import Review from "@/pages/Review";
 import Diagnostic from "@/pages/Diagnostic";
 import Settings from "@/pages/Settings";
+import Favorites from "@/pages/Favorites";
 
 export default function App() {
   return (
@@ -35,6 +36,7 @@ export default function App() {
         <Route path="review" element={<Review />} />
         <Route path="resources" element={<Resources />} />
         <Route path="settings" element={<Settings />} />
+        <Route path="favorites" element={<Favorites />} />
         <Route path="*" element={<Dashboard />} />
       </Route>
     </Routes>

@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Question, Answer, Mode } from "@/types";
 import QuestionCard from "@/components/QuestionCard";
+import BookmarkButton from "@/components/BookmarkButton";
 import { useProgress } from "@/state/ProgressContext";
+import { getFavorites } from "@/lib/favorites";
 
 interface RunState {
   questions: Question[];
@@ -23,6 +25,9 @@ export default function PracticeRun() {
   const [answers, setAnswers] = useState<Record<string, Answer>>({});
   const [revealed, setRevealed] = useState<Set<string>>(new Set());
   const [scores, setScores] = useState<Record<string, number>>({});
+  const [favIds, setFavIds] = useState<string[]>([]);
+
+  useEffect(() => { getFavorites().then(setFavIds); }, []);
 
   if (questions.length === 0) {
     return (
@@ -153,13 +158,21 @@ export default function PracticeRun() {
       </div>
 
       <div className="rounded-lg border border-slate-700 bg-surface p-4 sm:p-6">
-        <div className="mb-4 flex items-center justify-between">
+        <div className="mb-4 flex items-center justify-between gap-2">
           <span className="text-xs text-slate-500">
             Q{idx + 1} - {q.subtopic} - {q.difficulty}
           </span>
-          <span className="rounded bg-slate-700 px-2 py-0.5 text-xs text-slate-400 capitalize">
-            {q.type === "draganddrop" ? "drag & drop" : q.type}
-          </span>
+          <div className="flex items-center gap-2">
+            <BookmarkButton
+              questionId={q.id}
+              saved={favIds.includes(q.id)}
+              onToggle={setFavIds}
+              size="sm"
+            />
+            <span className="rounded bg-slate-700 px-2 py-0.5 text-xs text-slate-400 capitalize">
+              {q.type === "draganddrop" ? "drag & drop" : q.type}
+            </span>
+          </div>
         </div>
 
         <QuestionCard

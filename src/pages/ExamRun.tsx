@@ -3,9 +3,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Flag, Grid3x3, X } from "lucide-react";
 import type { Question, Answer } from "@/types";
 import QuestionCard from "@/components/QuestionCard";
+import BookmarkButton from "@/components/BookmarkButton";
 import { gradeExam, EXAM_DURATION_SEC } from "@/lib/exam";
 import * as db from "@/data/db";
 import { useProgress } from "@/state/ProgressContext";
+import { getFavorites } from "@/lib/favorites";
 
 interface RunState {
   questions: Question[];
@@ -30,6 +32,9 @@ export default function ExamRun() {
   const [idx, setIdx] = useState(0);
   const [answers, setAnswers] = useState<Record<string, Answer>>({});
   const [flagged, setFlagged] = useState<Set<string>>(new Set());
+  const [favIds, setFavIds] = useState<string[]>([]);
+
+  useEffect(() => { getFavorites().then(setFavIds); }, []);
   const [showNav, setShowNav] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -168,19 +173,22 @@ export default function ExamRun() {
       {/* Question */}
       <div className="flex-1 p-4 sm:p-6">
         <div className="mx-auto max-w-2xl">
-          <div className="mb-4 flex items-center justify-between">
+          <div className="mb-4 flex items-center justify-between gap-2">
             <span className="text-xs text-slate-500">{q.subtopic} - {q.difficulty}</span>
-            <button
-              onClick={toggleFlag}
-              className={`flex items-center gap-1.5 rounded border px-2 py-1 text-xs transition-colors ${
-                isFlagged
-                  ? "border-yellow-600 bg-yellow-900/30 text-yellow-400"
-                  : "border-slate-700 text-slate-500 hover:border-slate-500"
-              }`}
-              aria-label={isFlagged ? "Remove flag" : "Flag for review"}
-            >
-              <Flag size={12} /> {isFlagged ? "Flagged" : "Flag"}
-            </button>
+            <div className="flex items-center gap-2">
+              <BookmarkButton questionId={q.id} saved={favIds.includes(q.id)} onToggle={setFavIds} size="sm" />
+              <button
+                onClick={toggleFlag}
+                className={`flex items-center gap-1.5 rounded border px-2 py-1 text-xs transition-colors ${
+                  isFlagged
+                    ? "border-yellow-600 bg-yellow-900/30 text-yellow-400"
+                    : "border-slate-700 text-slate-500 hover:border-slate-500"
+                }`}
+                aria-label={isFlagged ? "Remove flag" : "Flag for review"}
+              >
+                <Flag size={12} /> {isFlagged ? "Flagged" : "Flag"}
+              </button>
+            </div>
           </div>
 
           <QuestionCard

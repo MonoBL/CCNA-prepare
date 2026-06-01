@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import type { Question, Answer } from "@/types";
@@ -9,6 +9,8 @@ import { diagnosticPlan, selectDiagnosticQuestions, scoreDiagnostic, priorityOrd
 import { band, bandColor, overallReadiness } from "@/lib/readiness";
 import { getDomain, weights } from "@/data/content";
 import { gradeItem } from "@/lib/grading";
+import BookmarkButton from "@/components/BookmarkButton";
+import { getFavorites } from "@/lib/favorites";
 
 type Phase = "intro" | "running" | "result";
 
@@ -27,8 +29,11 @@ export default function Diagnostic() {
   const [answers, setAnswers] = useState<Record<string, Answer>>({});
   const [revealed, setRevealed] = useState<Set<string>>(new Set());
   const [result, setResult] = useState<ResultState | null>(null);
+  const [favIds, setFavIds] = useState<string[]>([]);
 
   const plan = useMemo(() => diagnosticPlan(weights), []);
+
+  useEffect(() => { getFavorites().then(setFavIds); }, []);
 
   function startDiagnostic() {
     const qs = selectDiagnosticQuestions(plan);
@@ -235,11 +240,14 @@ export default function Diagnostic() {
       </div>
 
       <div className="rounded-lg border border-slate-700 bg-surface p-4 sm:p-5">
-        <div className="mb-4 flex items-center justify-between">
+        <div className="mb-4 flex items-center justify-between gap-2">
           <span className="text-xs text-slate-500">{q.subtopic} - {q.difficulty}</span>
-          <span className="rounded bg-slate-700 px-2 py-0.5 text-xs text-slate-400 capitalize">
-            {q.type === "draganddrop" ? "drag & drop" : q.type}
-          </span>
+          <div className="flex items-center gap-2">
+            <BookmarkButton questionId={q.id} saved={favIds.includes(q.id)} onToggle={setFavIds} size="sm" />
+            <span className="rounded bg-slate-700 px-2 py-0.5 text-xs text-slate-400 capitalize">
+              {q.type === "draganddrop" ? "drag & drop" : q.type}
+            </span>
+          </div>
         </div>
 
         <QuestionCard
