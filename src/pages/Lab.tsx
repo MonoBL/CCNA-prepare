@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, ChevronDown, ChevronUp, ExternalLink, FlaskConical } from "lucide-react";
+import { ArrowLeft, ChevronDown, ChevronUp, ExternalLink, FlaskConical, Download, Info } from "lucide-react";
 import { getLab, getDomain } from "@/data/content";
 
 export default function Lab() {
@@ -111,9 +111,36 @@ export default function Lab() {
           ))}
         </ol>
         {lab.packetTracerFile && (
-          <p className="mt-3 text-xs text-slate-500">
-            Packet Tracer file: <span className="text-slate-400">{lab.packetTracerFile}</span>
-          </p>
+          <div className="mt-4 space-y-3">
+            <a
+              href={`/${lab.packetTracerFile}`}
+              download
+              className="flex items-center gap-2 rounded-lg border border-accent/40 bg-accent/5 px-4 py-3 text-sm text-accent hover:bg-accent/10 transition-colors"
+            >
+              <Download size={15} className="shrink-0" />
+              <span className="font-medium">Download {lab.packetTracerFile.split("/").pop()}</span>
+            </a>
+            <div className="flex items-start gap-2 rounded-lg border border-slate-700 bg-surface/50 px-4 py-3 text-xs text-slate-400">
+              <Info size={13} className="mt-0.5 shrink-0 text-slate-500" />
+              <div className="space-y-1.5">
+                <p>
+                  <span className="text-slate-300 font-medium">Need Packet Tracer?</span> Free with a Cisco NetAcad account.
+                  <a href="https://www.netacad.com/courses/packet-tracer" target="_blank" rel="noopener noreferrer" className="ml-1 text-accent hover:underline inline-flex items-center gap-0.5">
+                    Get it here <ExternalLink size={10} />
+                  </a>
+                </p>
+                <p>
+                  <span className="text-slate-300 font-medium">Community PKT files:</span> search GitHub for
+                  <a href="https://github.com/search?q=ccna+packet+tracer+lab&type=repositories" target="_blank" rel="noopener noreferrer" className="ml-1 text-accent hover:underline inline-flex items-center gap-0.5">
+                    "ccna packet tracer lab" <ExternalLink size={10} />
+                  </a>
+                </p>
+                <p className="text-slate-600">
+                  To use your own .pkt file: place it at <code className="text-slate-500">public/assets/pt/{lab.packetTracerFile.split("/").pop()}</code> and rebuild.
+                </p>
+              </div>
+            </div>
+          </div>
         )}
       </section>
 
