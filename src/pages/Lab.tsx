@@ -74,7 +74,7 @@ export default function Lab() {
         <section>
           <h2 className="mb-2 text-sm font-medium uppercase tracking-wide text-slate-400">Topology</h2>
           <img
-            src={lab.topologyImage}
+            src={lab.topologyImage.startsWith("/") || lab.topologyImage.startsWith("http") ? lab.topologyImage : `/${lab.topologyImage}`}
             alt="Lab topology diagram"
             className="max-w-full rounded-lg border border-slate-700"
           />
