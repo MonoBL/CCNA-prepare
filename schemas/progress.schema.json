@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ccna-pwa/schemas/progress.schema.json",
+  "title": "CCNA Progress Export",
+  "description": "Shape of an exported/imported progress file and the IndexedDB store records.",
+  "type": "object",
+  "required": ["version", "attempts", "srs", "examRuns", "diagnostics", "settings"],
+  "properties": {
+    "version": { "type": "integer", "minimum": 1 },
+    "exportedAt": { "type": "integer" },
+    "attempts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["questionId", "type", "correct", "score", "ts", "mode", "domain", "subtopic"],
+        "properties": {
+          "id": { "type": "integer" },
+          "questionId": { "type": "string" },
+          "type": { "type": "string", "enum": ["single", "multi", "draganddrop", "sim", "simlet", "testlet"] },
+          "selected": { "type": "array", "items": { "type": "string" } },
+          "mapping": { "type": "object", "additionalProperties": { "type": "string" } },
+          "rubricPassed": { "type": "array", "items": { "type": "string" } },
+          "correct": { "type": "boolean" },
+          "score": { "type": "number", "minimum": 0, "maximum": 1 },
+          "ts": { "type": "integer" },
+          "mode": { "type": "string", "enum": ["practice", "diagnostic", "exam"] },
+          "domain": { "type": "string" },
+          "subtopic": { "type": "string" }
+        }
+      }
+    },
+    "srs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["questionId", "ef", "interval", "reps", "due"],
+        "properties": {
+          "questionId": { "type": "string" },
+          "ef": { "type": "number" },
+          "interval": { "type": "integer" },
+          "reps": { "type": "integer" },
+          "due": { "type": "integer" }
+        }
+      }
+    },
+    "examRuns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["ts", "overall", "byDomain", "items"],
+        "properties": {
+          "id": { "type": "integer" },
+          "ts": { "type": "integer" },
+          "durationUsedSec": { "type": "integer" },
+          "overall": { "type": "number", "minimum": 0, "maximum": 1 },
+          "byDomain": { "type": "object", "additionalProperties": { "type": "number" } },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["questionId", "score"],
+              "properties": {
+                "questionId": { "type": "string" },
+                "score": { "type": "number", "minimum": 0, "maximum": 1 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "diagnostics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["ts", "byDomain", "priority", "overall"],
+        "properties": {
+          "id": { "type": "integer" },
+          "ts": { "type": "integer" },
+          "byDomain": { "type": "object", "additionalProperties": { "type": "number" } },
+          "priority": { "type": "array", "items": { "type": "string" } },
+          "overall": { "type": "number", "minimum": 0, "maximum": 1 }
+        }
+      }
+    },
+    "settings": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

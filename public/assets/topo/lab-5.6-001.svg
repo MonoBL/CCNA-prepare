@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 200" width="520" height="200" style="background:#131c2e;font-family:ui-sans-serif,system-ui,sans-serif;">
+  <!-- Admin PC -->
+  <rect x="10" y="50" width="80" height="40" rx="4" fill="#1e293b" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="50" y="67" text-anchor="middle" fill="#94a3b8" font-size="10" font-weight="600">Admin</text>
+  <text x="50" y="82" text-anchor="middle" fill="#64748b" font-size="8">10.1.1.10/24</text>
+  <!-- Untrusted PC -->
+  <rect x="10" y="115" width="80" height="40" rx="4" fill="#1e293b" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="50" y="131" text-anchor="middle" fill="#94a3b8" font-size="10" font-weight="600">Untrusted</text>
+  <text x="50" y="146" text-anchor="middle" fill="#64748b" font-size="8">10.1.2.10/24</text>
+  <!-- Links to router -->
+  <line x1="90" y1="70" x2="150" y2="100" stroke="#22c55e" stroke-width="1.5"/>
+  <line x1="90" y1="135" x2="150" y2="100" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <!-- Router with ACL -->
+  <rect x="150" y="55" width="140" height="90" rx="6" fill="#1e293b" stroke="#a855f7" stroke-width="2"/>
+  <text x="220" y="82" text-anchor="middle" fill="#e2e8f0" font-size="12" font-weight="700">R1</text>
+  <text x="220" y="97" text-anchor="middle" fill="#64748b" font-size="9">G0/0 in (LAN1)</text>
+  <text x="220" y="110" text-anchor="middle" fill="#64748b" font-size="9">G0/1 in (LAN2)</text>
+  <text x="220" y="123" text-anchor="middle" fill="#64748b" font-size="9">G0/2 out (Server)</text>
+  <!-- ACL badge -->
+  <rect x="163" y="132" width="114" height="18" rx="3" fill="#2d1b4e" stroke="#a855f7" stroke-width="1"/>
+  <text x="220" y="145" text-anchor="middle" fill="#a855f7" font-size="9" font-weight="600">ACL: BLOCK_UNTRUSTED</text>
+  <!-- Link Router - Server -->
+  <line x1="290" y1="100" x2="360" y2="100" stroke="#334155" stroke-width="1.5"/>
+  <text x="325" y="93" text-anchor="middle" fill="#475569" font-size="8">10.3.3.0/24</text>
+  <!-- Web Server -->
+  <rect x="360" y="65" width="90" height="70" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+  <text x="405" y="90" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="600">Web</text>
+  <text x="405" y="104" text-anchor="middle" fill="#94a3b8" font-size="11" font-weight="600">Server</text>
+  <text x="405" y="120" text-anchor="middle" fill="#64748b" font-size="8">10.3.3.50</text>
+  <text x="405" y="130" text-anchor="middle" fill="#64748b" font-size="8">TCP 80/443</text>
+  <!-- Link Server - FTP -->
+  <line x1="450" y1="100" x2="500" y2="75" stroke="#334155" stroke-width="1.5"/>
+  <line x1="450" y1="100" x2="500" y2="125" stroke="#334155" stroke-width="1.5"/>
+  <!-- FTP Server -->
+  <rect x="460" y="55" width="55" height="30" rx="4" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+  <text x="487" y="67" text-anchor="middle" fill="#94a3b8" font-size="9">FTP</text>
+  <text x="487" y="79" text-anchor="middle" fill="#64748b" font-size="8">TCP 21</text>
+  <!-- DNS Server -->
+  <rect x="460" y="110" width="55" height="30" rx="4" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+  <text x="487" y="122" text-anchor="middle" fill="#94a3b8" font-size="9">DNS</text>
+  <text x="487" y="134" text-anchor="middle" fill="#64748b" font-size="8">UDP 53</text>
+  <!-- Legend -->
+  <line x1="10" y1="185" x2="35" y2="185" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="40" y="189" fill="#64748b" font-size="9">Permitted (TCP 80/443)</text>
+  <line x1="190" y1="185" x2="215" y2="185" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="220" y="189" fill="#64748b" font-size="9">Denied by ACL</text>
+</svg>

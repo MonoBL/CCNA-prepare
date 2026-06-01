@@ -1,0 +1,266 @@
+[
+  {
+    "id": "q-1.6-001",
+    "domain": "1.0",
+    "subtopic": "1.6",
+    "type": "single",
+    "difficulty": "easy",
+    "stem": "A network uses the subnet 192.168.10.0/26. How many usable host addresses are available in this subnet?",
+    "options": [
+      { "id": "a", "text": "62", "correct": true, "rationale": "A /26 leaves 32 - 26 = 6 host bits. 2^6 = 64 total addresses, minus the network and broadcast addresses = 62 usable." },
+      { "id": "b", "text": "64", "correct": false, "rationale": "64 is the total block size (2^6), but the network address and the broadcast address cannot be assigned to hosts." },
+      { "id": "c", "text": "30", "correct": false, "rationale": "30 usable hosts corresponds to a /27 (5 host bits: 2^5 - 2), not a /26." },
+      { "id": "d", "text": "126", "correct": false, "rationale": "126 usable hosts corresponds to a /25 (7 host bits: 2^7 - 2), not a /26." }
+    ],
+    "explanation": "Usable hosts = 2^(host bits) - 2. For a /26 there are 6 host bits, so 2^6 - 2 = 62.",
+    "references": [
+      { "label": "Cisco: IP Addressing and Subnetting for New Users", "url": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/13788-3.html" },
+      { "label": "Jeremy's IT Lab - Free CCNA (playlist)", "url": "https://www.youtube.com/watch?v=H8W9oMNSuwo&list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ" }
+    ],
+    "tags": ["subnetting", "ipv4"]
+  },
+  {
+    "id": "q-1.5-001",
+    "domain": "1.0",
+    "subtopic": "1.5",
+    "type": "single",
+    "difficulty": "easy",
+    "stem": "Which statement correctly describes UDP compared to TCP?",
+    "options": [
+      { "id": "a", "text": "UDP is connectionless and does not provide sequencing or retransmission.", "correct": true, "rationale": "UDP has no handshake, no sequence/acknowledgment numbers, and no retransmission. It favors low overhead and speed." },
+      { "id": "b", "text": "UDP establishes a three-way handshake before sending data.", "correct": false, "rationale": "The three-way handshake (SYN, SYN-ACK, ACK) is a TCP feature; UDP sends immediately with no setup." },
+      { "id": "c", "text": "UDP guarantees in-order delivery of segments.", "correct": false, "rationale": "Ordered, reliable delivery is provided by TCP using sequence and acknowledgment numbers, not by UDP." },
+      { "id": "d", "text": "UDP uses windowing for flow control.", "correct": false, "rationale": "Windowing and flow control are TCP mechanisms; UDP provides none." }
+    ],
+    "explanation": "UDP is connectionless and best-effort. TCP is connection-oriented with a handshake, sequencing, acknowledgments, retransmission, and flow control (windowing).",
+    "references": [
+      { "label": "Cisco: TCP/IP Overview", "url": "https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/13769-5.html" },
+      { "label": "Jeremy's IT Lab - Free CCNA (playlist)", "url": "https://www.youtube.com/watch?v=H8W9oMNSuwo&list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ" }
+    ],
+    "tags": ["tcp", "udp", "transport-layer"]
+  },
+  {
+    "id": "q-2.2-001",
+    "domain": "2.0",
+    "subtopic": "2.2",
+    "type": "single",
+    "difficulty": "medium",
+    "stem": "On an IEEE 802.1Q trunk, how are frames belonging to the native VLAN handled by default?",
+    "options": [
+      { "id": "a", "text": "They are forwarded untagged.", "correct": true, "rationale": "By default 802.1Q does not add a tag to native VLAN frames; they cross the trunk untagged. The native VLAN must match on both ends of the trunk." },
+      { "id": "b", "text": "They are forwarded with an ISL tag.", "correct": false, "rationale": "ISL is a separate legacy Cisco trunking protocol, not used by 802.1Q. 802.1Q inserts a 4-byte tag, and not for the native VLAN." },
+      { "id": "c", "text": "They are dropped.", "correct": false, "rationale": "Native VLAN frames are forwarded, not dropped. Only a native VLAN mismatch between the two ends causes problems." },
+      { "id": "d", "text": "They are always tagged with VLAN 1.", "correct": false, "rationale": "The native VLAN defaults to VLAN 1 but is configurable, and native VLAN frames are sent untagged, not tagged." }
+    ],
+    "explanation": "802.1Q leaves native VLAN traffic untagged. A native VLAN mismatch between trunk ends can cause traffic to cross VLANs and triggers CDP warnings.",
+    "references": [
+      { "label": "Cisco: Configure 802.1Q Trunking Between Catalyst Switches", "url": "https://www.cisco.com/c/en/us/support/docs/switches/catalyst-6000-series-switches/10599-88.html" },
+      { "label": "Jeremy's IT Lab - Free CCNA (playlist)", "url": "https://www.youtube.com/watch?v=H8W9oMNSuwo&list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ" }
+    ],
+    "tags": ["trunk", "802.1q", "native-vlan"]
+  },
+  {
+    "id": "q-2.5-001",
+    "domain": "2.0",
+    "subtopic": "2.5",
+    "type": "single",
+    "difficulty": "medium",
+    "stem": "In Rapid PVST+, how is the root bridge elected?",
+    "options": [
+      { "id": "a", "text": "The switch with the lowest bridge ID (priority, then MAC address) becomes root.", "correct": true, "rationale": "The Bridge ID = priority + system MAC address. The lowest priority wins; if priorities tie, the lowest MAC address breaks the tie." },
+      { "id": "b", "text": "The switch with the highest bridge ID becomes root.", "correct": false, "rationale": "STP elects the LOWEST bridge ID as root, not the highest." },
+      { "id": "c", "text": "The switch with the most ports becomes root.", "correct": false, "rationale": "Port count plays no role in root bridge election." },
+      { "id": "d", "text": "The switch with the highest IP address becomes root.", "correct": false, "rationale": "STP uses the bridge ID (priority + MAC), not IP addresses." }
+    ],
+    "explanation": "Root bridge = lowest Bridge ID. Default priority is 32768 plus the VLAN ID in PVST+. The tiebreaker is the lowest MAC address.",
+    "references": [
+      { "label": "Cisco: Configuring Spanning Tree Protocol (Catalyst 9200)", "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9200/software/release/16-12/configuration_guide/lyr2/b_1612_lyr2_9200_cg/configuring_spanning_tree_protocol.html" },
+      { "label": "Jeremy's IT Lab - Free CCNA (playlist)", "url": "https://www.youtube.com/watch?v=H8W9oMNSuwo&list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ" }
+    ],
+    "tags": ["stp", "root-bridge", "rapid-pvst"]
+  },
+  {
+    "id": "q-2.5-002",
+    "domain": "2.0",
+    "subtopic": "2.5",
+    "type": "multi",
+    "difficulty": "medium",
+    "stem": "Which two statements about PortFast are correct? (Choose two.)",
+    "options": [
+      { "id": "a", "text": "It transitions an access port directly to the forwarding state.", "correct": true, "rationale": "PortFast skips the listening and learning states, moving the port straight to forwarding for faster host connectivity." },
+      { "id": "b", "text": "It should be enabled on ports connected to end devices, not to other switches.", "correct": true, "rationale": "PortFast is for edge/access ports to hosts. Enabling it toward another switch can create a temporary bridging loop." },
+      { "id": "c", "text": "It permanently disables Spanning Tree on the port.", "correct": false, "rationale": "PortFast does not disable STP. The port still participates in STP and can still receive BPDUs." },
+      { "id": "d", "text": "It is recommended on trunk links between switches.", "correct": false, "rationale": "Enabling PortFast toward another switch risks a loop; it is intended for edge ports to end devices." }
+    ],
+    "explanation": "PortFast speeds up host port activation by skipping listening/learning. Use it only on access ports to end devices, and pair it with BPDU guard for protection.",
+    "references": [
+      { "label": "Cisco: Configuring Spanning Tree Protocol (Catalyst 9200)", "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9200/software/release/16-12/configuration_guide/lyr2/b_1612_lyr2_9200_cg/configuring_spanning_tree_protocol.html" },
+      { "label": "Jeremy's IT Lab - Free CCNA (playlist)", "url": "https://www.youtube.com/watch?v=H8W9oMNSuwo&list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ" }
+    ],
+    "tags": ["stp", "portfast"]
+  },
+  {
+    "id": "q-3.1-001",
+    "domain": "3.0",
+    "subtopic": "3.1",
+    "type": "single",
+    "difficulty": "easy",
+    "stem": "What is the default administrative distance of OSPF on a Cisco router?",
+    "options": [
+      { "id": "a", "text": "110", "correct": true, "rationale": "Cisco's default administrative distance for OSPF is 110." },
+      { "id": "b", "text": "90", "correct": false, "rationale": "90 is the default AD of internal EIGRP, not OSPF." },
+      { "id": "c", "text": "120", "correct": false, "rationale": "120 is the default AD of RIP, not OSPF." },
+      { "id": "d", "text": "1", "correct": false, "rationale": "1 is the default AD of a static route, not OSPF." }
+    ],
+    "explanation": "Administrative distance ranks the trustworthiness of a route source. Common values: connected 0, static 1, eBGP 20, EIGRP 90, OSPF 110, RIP 120. Lower is preferred.",
+    "references": [
+      { "label": "Cisco: IP Routing - Protocol-Independent Features (IOS XE 17.x)", "url": "https://www.cisco.com/c/en/us/td/docs/routers/ios/config/17-x/ip-routing/b-ip-routing/m_iri-ip-prot-indep-0.html" },
+      { "label": "Jeremy's IT Lab - Free CCNA (playlist)", "url": "https://www.youtube.com/watch?v=H8W9oMNSuwo&list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ" }
+    ],
+    "tags": ["administrative-distance", "ospf", "routing-table"]
+  },
+  {
+    "id": "q-3.3-001",
+    "domain": "3.0",
+    "subtopic": "3.3",
+    "type": "draganddrop",
+    "difficulty": "medium",
+    "stem": "Drag each route source onto its default administrative distance.",
+    "tokens": [
+      { "id": "t0", "text": "0" },
+      { "id": "t1", "text": "1" },
+      { "id": "t110", "text": "110" }
+    ],
+    "dropZones": [
+      { "id": "z-connected", "label": "Directly connected interface", "correctTokenId": "t0" },
+      { "id": "z-static", "label": "Static route", "correctTokenId": "t1" },
+      { "id": "z-ospf", "label": "OSPF", "correctTokenId": "t110" }
+    ],
+    "explanation": "Lower administrative distance = more trusted. A directly connected network is 0, a static route is 1, and OSPF is 110.",
+    "references": [
+      { "label": "Cisco: IP Routing - Protocol-Independent Features (IOS XE 17.x)", "url": "https://www.cisco.com/c/en/us/td/docs/routers/ios/config/17-x/ip-routing/b-ip-routing/m_iri-ip-prot-indep-0.html" },
+      { "label": "Jeremy's IT Lab - Free CCNA (playlist)", "url": "https://www.youtube.com/watch?v=H8W9oMNSuwo&list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ" }
+    ],
+    "tags": ["administrative-distance", "static-route", "routing-table"]
+  },
+  {
+    "id": "q-4.1-001",
+    "domain": "4.0",
+    "subtopic": "4.1",
+    "type": "single",
+    "difficulty": "medium",
+    "stem": "In Cisco NAT terminology, what is the 'inside local' address?",
+    "options": [
+      { "id": "a", "text": "The private address of an inside host as seen within the inside network.", "correct": true, "rationale": "Inside local is the actual configured address (usually a private/RFC 1918 address) of the inside host on the local network." },
+      { "id": "b", "text": "The public address that represents an inside host to the outside network.", "correct": false, "rationale": "That describes the inside GLOBAL address, the translated/public address." },
+      { "id": "c", "text": "The address of an outside host as seen by inside hosts.", "correct": false, "rationale": "That describes the outside local address." },
+      { "id": "d", "text": "The real registered address of an outside host.", "correct": false, "rationale": "That describes the outside global address." }
+    ],
+    "explanation": "Inside local = real private address of the inside host. Inside global = its translated public address. Outside local and outside global describe outside hosts in the same way.",
+    "references": [
+      { "label": "Cisco: NAT Configuration Guide (Catalyst 9000, IOS XE 17)", "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/c9000/lyr3-fwd/nat/nat-configuration-guide/nat.html" },
+      { "label": "Jeremy's IT Lab - Free CCNA (playlist)", "url": "https://www.youtube.com/watch?v=H8W9oMNSuwo&list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ" }
+    ],
+    "tags": ["nat", "inside-local", "inside-global"]
+  },
+  {
+    "id": "q-4.5-001",
+    "domain": "4.0",
+    "subtopic": "4.5",
+    "type": "single",
+    "difficulty": "easy",
+    "stem": "On a Cisco device, which syslog severity level represents the most severe condition?",
+    "options": [
+      { "id": "a", "text": "0 (Emergencies)", "correct": true, "rationale": "Severity 0 = Emergencies, the highest severity. The level number increases as severity decreases (7 = Debugging)." },
+      { "id": "b", "text": "7 (Debugging)", "correct": false, "rationale": "7 is the LEAST severe (Debugging). A higher number means lower severity." },
+      { "id": "c", "text": "1 (Alerts)", "correct": false, "rationale": "1 (Alerts) is severe, but 0 (Emergencies) is more severe." },
+      { "id": "d", "text": "5 (Notifications)", "correct": false, "rationale": "5 (Notifications) is in the informational range, not the most severe." }
+    ],
+    "explanation": "Syslog severities 0-7: 0 Emergencies, 1 Alerts, 2 Critical, 3 Errors, 4 Warnings, 5 Notifications, 6 Informational, 7 Debugging. Lower number = more severe.",
+    "references": [
+      { "label": "Cisco: Embedded Syslog Manager (System Management, IOS XE 17.x)", "url": "https://www.cisco.com/c/en/us/td/docs/routers/ios/config/17-x/syst-mgmt/b-system-management/m_esm-syslog.html" },
+      { "label": "Jeremy's IT Lab - Free CCNA (playlist)", "url": "https://www.youtube.com/watch?v=H8W9oMNSuwo&list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ" }
+    ],
+    "tags": ["syslog", "severity-levels"]
+  },
+  {
+    "id": "q-5.6-001",
+    "domain": "5.0",
+    "subtopic": "5.6",
+    "type": "single",
+    "difficulty": "medium",
+    "stem": "Following Cisco best practice, where should a standard IPv4 ACL be placed?",
+    "options": [
+      { "id": "a", "text": "As close as possible to the destination.", "correct": true, "rationale": "A standard ACL filters only on source address, so placing it near the destination avoids unintentionally blocking that source from reaching other networks along the path." },
+      { "id": "b", "text": "As close as possible to the source.", "correct": false, "rationale": "That is the guideline for EXTENDED ACLs, which match source and destination. A standard ACL near the source could block legitimate traffic to other destinations." },
+      { "id": "c", "text": "On the router with the highest IP address.", "correct": false, "rationale": "Placement depends on traffic flow and ACL type, not on IP address values." },
+      { "id": "d", "text": "On every interface along the path.", "correct": false, "rationale": "An ACL is applied only where needed for the flow. Applying it everywhere is unnecessary and error-prone." }
+    ],
+    "explanation": "Standard ACL = source-only matching, place near the destination. Extended ACL = source + destination matching, place near the source to drop unwanted traffic early.",
+    "references": [
+      { "label": "Cisco: IP Access List Overview (Security Config Guide, IOS XE)", "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_data_acl/configuration/xe-16-9/sec-data-acl-xe-16-9-book/sec-access-list-ov.html" },
+      { "label": "Jeremy's IT Lab - Free CCNA (playlist)", "url": "https://www.youtube.com/watch?v=H8W9oMNSuwo&list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ" }
+    ],
+    "tags": ["acl", "standard-acl", "placement"]
+  },
+  {
+    "id": "q-5.7-001",
+    "domain": "5.0",
+    "subtopic": "5.7",
+    "type": "single",
+    "difficulty": "hard",
+    "stem": "What does Dynamic ARP Inspection (DAI) use to validate ARP packets received on untrusted ports?",
+    "options": [
+      { "id": "a", "text": "The DHCP snooping binding database.", "correct": true, "rationale": "DAI checks ARP packets against the IP-to-MAC-to-port bindings built by DHCP snooping; mismatches on untrusted ports are dropped." },
+      { "id": "b", "text": "The MAC address table only.", "correct": false, "rationale": "DAI relies on DHCP snooping bindings, not solely on the MAC address table." },
+      { "id": "c", "text": "The routing table.", "correct": false, "rationale": "The routing table makes Layer 3 forwarding decisions; it has no role in ARP validation." },
+      { "id": "d", "text": "The CDP neighbor table.", "correct": false, "rationale": "CDP discovers directly connected Cisco devices; it is unrelated to ARP validation." }
+    ],
+    "explanation": "DAI depends on DHCP snooping. Trusted ports (uplinks and the DHCP server side) bypass inspection; on untrusted ports, ARP is validated against the DHCP snooping binding table.",
+    "references": [
+      { "label": "Cisco: Configuring Dynamic ARP Inspection (Catalyst 9300)", "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst9300/software/release/17-9/configuration_guide/sec/b_179_sec_9300_cg/configuring_dynamic_arp_inspection.html" },
+      { "label": "Jeremy's IT Lab - Free CCNA (playlist)", "url": "https://www.youtube.com/watch?v=H8W9oMNSuwo&list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ" }
+    ],
+    "tags": ["dai", "dhcp-snooping", "layer2-security"]
+  },
+  {
+    "id": "q-6.5-001",
+    "domain": "6.0",
+    "subtopic": "6.5",
+    "type": "single",
+    "difficulty": "easy",
+    "stem": "In a REST API using CRUD operations, which HTTP method corresponds to the Read operation?",
+    "options": [
+      { "id": "a", "text": "GET", "correct": true, "rationale": "GET retrieves (reads) a resource without modifying it." },
+      { "id": "b", "text": "POST", "correct": false, "rationale": "POST is used to Create a new resource." },
+      { "id": "c", "text": "DELETE", "correct": false, "rationale": "DELETE removes a resource." },
+      { "id": "d", "text": "PUT", "correct": false, "rationale": "PUT typically Updates (replaces) an existing resource." }
+    ],
+    "explanation": "CRUD-to-HTTP mapping: Create = POST, Read = GET, Update = PUT or PATCH, Delete = DELETE.",
+    "references": [
+      { "label": "Cisco: RESTCONF Protocol (Programmability Config Guide, IOS XE)", "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/prog/configuration/1717/b_1717_programmability_cg/m_1717_prog_restconf.html" },
+      { "label": "Jeremy's IT Lab - Free CCNA (playlist)", "url": "https://www.youtube.com/watch?v=H8W9oMNSuwo&list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ" }
+    ],
+    "tags": ["rest-api", "crud", "http-verbs"]
+  },
+  {
+    "id": "q-6.7-001",
+    "domain": "6.0",
+    "subtopic": "6.7",
+    "type": "single",
+    "difficulty": "easy",
+    "stem": "In JSON, which characters enclose an object (a set of key-value pairs)?",
+    "options": [
+      { "id": "a", "text": "Curly braces { }", "correct": true, "rationale": "JSON objects are wrapped in curly braces and contain comma-separated \"key\": value pairs." },
+      { "id": "b", "text": "Square brackets [ ]", "correct": false, "rationale": "Square brackets enclose a JSON ARRAY (an ordered list), not an object." },
+      { "id": "c", "text": "Parentheses ( )", "correct": false, "rationale": "Parentheses have no structural meaning in JSON." },
+      { "id": "d", "text": "Angle brackets < >", "correct": false, "rationale": "Angle brackets are used in XML and HTML, not JSON." }
+    ],
+    "explanation": "JSON objects use { }, arrays use [ ], keys are strings in double quotes, and values can be string, number, boolean, null, object, or array.",
+    "references": [
+      { "label": "Cisco: RESTCONF Protocol (data encoding, IOS XE)", "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/prog/configuration/1717/b_1717_programmability_cg/m_1717_prog_restconf.html" },
+      { "label": "Jeremy's IT Lab - Free CCNA (playlist)", "url": "https://www.youtube.com/watch?v=H8W9oMNSuwo&list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ" }
+    ],
+    "tags": ["json", "data-formats"]
+  }
+]

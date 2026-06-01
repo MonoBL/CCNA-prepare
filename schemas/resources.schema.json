@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://ccna-pwa/schemas/resources.schema.json",
+  "title": "CCNA Resource Map",
+  "type": "object",
+  "required": ["global", "domains"],
+  "properties": {
+    "_meta": { "type": "object" },
+    "global": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["label", "url", "type"],
+        "properties": {
+          "label": { "type": "string" },
+          "url": { "type": "string", "format": "uri" },
+          "type": { "type": "string" }
+        }
+      }
+    },
+    "domains": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "ciscoDocs"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[1-6]\\.0$" },
+          "name": { "type": "string" },
+          "ciscoDocs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["topic", "title", "url", "resourceType"],
+              "properties": {
+                "topic": { "type": "string" },
+                "title": { "type": "string" },
+                "url": { "type": "string", "format": "uri" },
+                "resourceType": { "type": "string" },
+                "verified": { "type": "boolean" }
+              }
+            }
+          },
+          "jitsCoverage": { "type": "string" },
+          "courseModules": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

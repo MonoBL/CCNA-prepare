@@ -1,0 +1,195 @@
+[
+  {
+    "id": "lab-1.6-001",
+    "domain": "1.0",
+    "subtopics": ["1.6", "1.8"],
+    "title": "Configure and verify IPv4 and IPv6 addressing on a router interface",
+    "type": "sim",
+    "topologyImage": "assets/topo/lab-1.6-001.svg",
+    "scenario": "R1 connects to the LAN through GigabitEthernet0/0. Configure dual-stack addressing on that interface and bring it up. IPv4: 10.1.1.1/24. IPv6: 2001:db8:1::1/64.",
+    "startingConfigs": { "R1": "hostname R1\n!\ninterface GigabitEthernet0/0\n shutdown\n!" },
+    "tasks": [
+      { "id": 1, "text": "Assign 10.1.1.1/24 to R1 GigabitEthernet0/0 and enable the interface", "points": 25 },
+      { "id": 2, "text": "Assign IPv6 address 2001:db8:1::1/64 to the same interface", "points": 25 },
+      { "id": 3, "text": "Verify with 'show ip interface brief' and 'show ipv6 interface brief'", "points": 10 }
+    ],
+    "rubric": [
+      { "id": "r1", "text": "G0/0 has IPv4 10.1.1.1 255.255.255.0", "points": 20, "verifyCmd": "show running-config interface g0/0", "verifyRegex": "ip address 10\\.1\\.1\\.1 255\\.255\\.255\\.0" },
+      { "id": "r2", "text": "G0/0 has IPv6 2001:db8:1::1/64", "points": 20, "verifyCmd": "show running-config interface g0/0", "verifyRegex": "(?i)ipv6 address 2001:db8:1::1/64" },
+      { "id": "r3", "text": "G0/0 line protocol is up (no shutdown)", "points": 10, "verifyCmd": "show ip interface brief", "verifyRegex": "GigabitEthernet0/0\\s+10\\.1\\.1\\.1\\s+\\S+\\s+up\\s+up" }
+    ],
+    "solution": {
+      "config": { "R1": "interface GigabitEthernet0/0\n ip address 10.1.1.1 255.255.255.0\n ipv6 address 2001:DB8:1::1/64\n no shutdown" },
+      "explanation": "Layer 3 addressing requires the interface to be administratively up (no shutdown) with the line protocol up. Enabling IPv6 also auto-generates a link-local FE80::/10 address (modified EUI-64) on the interface."
+    },
+    "references": [
+      { "label": "Cisco: Configuring IPv4 Addresses (IOS XE 17.x)", "url": "https://www.cisco.com/c/en/us/td/docs/routers/ios/config/17-x/ip-addressing/b-ip-addressing/m_config-ipv4-addr-0.html" },
+      { "label": "Cisco: IPv6 Addressing and Basic Connectivity (IOS XE 17.x)", "url": "https://www.cisco.com/c/en/us/td/docs/routers/ios/config/17-x/ip-addressing/b-ip-addressing/m_ip6-add-basic-conn-xe.html" }
+    ],
+    "packetTracerFile": "assets/pt/lab-1.6-001.pkt"
+  },
+  {
+    "id": "lab-2.1-001",
+    "domain": "2.0",
+    "subtopics": ["2.1", "2.2"],
+    "title": "Configure VLANs and an 802.1Q trunk across two switches",
+    "type": "sim",
+    "topologyImage": "assets/topo/lab-2.1-001.svg",
+    "scenario": "SW1 and SW2 are connected on GigabitEthernet0/1. Create VLAN 10 (DATA) and VLAN 20 (SALES) on both switches, trunk the link between them with 802.1Q, and place SW1 FastEthernet0/1 in VLAN 10 as an access port.",
+    "startingConfigs": { "SW1": "hostname SW1\n", "SW2": "hostname SW2\n" },
+    "tasks": [
+      { "id": 1, "text": "Create VLAN 10 (DATA) and VLAN 20 (SALES) on both switches", "points": 20 },
+      { "id": 2, "text": "Configure Gi0/1 as an 802.1Q trunk on both switches", "points": 20 },
+      { "id": 3, "text": "Assign SW1 Fa0/1 to VLAN 10 as an access port", "points": 10 }
+    ],
+    "rubric": [
+      { "id": "r1", "text": "VLAN 10 named DATA exists", "points": 10, "verifyCmd": "show vlan brief", "verifyRegex": "10\\s+DATA" },
+      { "id": "r2", "text": "VLAN 20 named SALES exists", "points": 10, "verifyCmd": "show vlan brief", "verifyRegex": "20\\s+SALES" },
+      { "id": "r3", "text": "Gi0/1 is trunking", "points": 10, "verifyCmd": "show interfaces trunk", "verifyRegex": "Gi0/1" },
+      { "id": "r4", "text": "Fa0/1 is an access port in VLAN 10", "points": 10, "verifyCmd": "show vlan brief", "verifyRegex": "10\\s+DATA.*Fa0/1" }
+    ],
+    "solution": {
+      "config": {
+        "SW1": "vlan 10\n name DATA\nvlan 20\n name SALES\n!\ninterface GigabitEthernet0/1\n switchport trunk encapsulation dot1q\n switchport mode trunk\n!\ninterface FastEthernet0/1\n switchport mode access\n switchport access vlan 10",
+        "SW2": "vlan 10\n name DATA\nvlan 20\n name SALES\n!\ninterface GigabitEthernet0/1\n switchport trunk encapsulation dot1q\n switchport mode trunk"
+      },
+      "explanation": "VLANs must exist before assignment. The trunk carries tagged frames for VLANs 10 and 20; native VLAN frames stay untagged and the native VLAN must match on both ends. On platforms that support only 802.1Q the 'switchport trunk encapsulation dot1q' line is not required."
+    },
+    "references": [
+      { "label": "Cisco: Configuring VLAN Trunks (Catalyst 1000)", "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/catalyst1000/software/releases/15_2_7_e/configuration_guides/vlan/b_1527e_vlan_c1000_cg/configuring_vlan_trunks.html" },
+      { "label": "Cisco: 802.1Q Trunking Between Catalyst Switches", "url": "https://www.cisco.com/c/en/us/support/docs/switches/catalyst-6000-series-switches/10599-88.html" }
+    ],
+    "packetTracerFile": "assets/pt/lab-2.1-001.pkt"
+  },
+  {
+    "id": "lab-3.4-001",
+    "domain": "3.0",
+    "subtopics": ["3.4"],
+    "title": "Configure and verify single-area OSPFv2",
+    "type": "sim",
+    "topologyImage": "assets/topo/lab-3.4-001.svg",
+    "scenario": "R1 (10.0.0.1/30) and R2 (10.0.0.2/30) connect on a point-to-point link. R1 has LAN 192.168.1.0/24 and R2 has LAN 192.168.2.0/24. Configure single-area OSPFv2 (area 0, process 1) so the two LANs can reach each other, using router IDs 1.1.1.1 and 2.2.2.2.",
+    "startingConfigs": {
+      "R1": "hostname R1\ninterface g0/0\n ip address 10.0.0.1 255.255.255.252\n no shutdown\ninterface g0/1\n ip address 192.168.1.1 255.255.255.0\n no shutdown",
+      "R2": "hostname R2\ninterface g0/0\n ip address 10.0.0.2 255.255.255.252\n no shutdown\ninterface g0/1\n ip address 192.168.2.1 255.255.255.0\n no shutdown"
+    },
+    "tasks": [
+      { "id": 1, "text": "Enable OSPF process 1 on R1 and R2", "points": 15 },
+      { "id": 2, "text": "Advertise the connected networks into area 0 with correct wildcard masks", "points": 25 },
+      { "id": 3, "text": "Set R1 router-id 1.1.1.1 and R2 router-id 2.2.2.2", "points": 10 },
+      { "id": 4, "text": "Verify the neighbor adjacency reaches FULL", "points": 10 }
+    ],
+    "rubric": [
+      { "id": "r1", "text": "R1 OSPF router-id is 1.1.1.1", "points": 10, "verifyCmd": "show running-config | section ospf", "verifyRegex": "router-id 1\\.1\\.1\\.1" },
+      { "id": "r2", "text": "R1 advertises 10.0.0.0/30 into area 0", "points": 10, "verifyCmd": "show running-config | section ospf", "verifyRegex": "network 10\\.0\\.0\\.0 0\\.0\\.0\\.3 area 0" },
+      { "id": "r3", "text": "R1 advertises 192.168.1.0/24 into area 0", "points": 10, "verifyCmd": "show running-config | section ospf", "verifyRegex": "network 192\\.168\\.1\\.0 0\\.0\\.0\\.255 area 0" },
+      { "id": "r4", "text": "Neighbor adjacency is FULL", "points": 10, "verifyCmd": "show ip ospf neighbor", "verifyRegex": "FULL" }
+    ],
+    "solution": {
+      "config": {
+        "R1": "router ospf 1\n router-id 1.1.1.1\n network 10.0.0.0 0.0.0.3 area 0\n network 192.168.1.0 0.0.0.255 area 0",
+        "R2": "router ospf 1\n router-id 2.2.2.2\n network 10.0.0.0 0.0.0.3 area 0\n network 192.168.2.0 0.0.0.255 area 0"
+      },
+      "explanation": "OSPF network statements use wildcard masks (inverse of the subnet mask). Both routers must agree on area and on hello/dead timers. On a point-to-point link there is no DR/BDR election and the adjacency proceeds to FULL. Setting an explicit router-id avoids it changing if interfaces flap."
+    },
+    "references": [
+      { "label": "Cisco: Enabling OSPFv2 on an Interface (IP Routing, IOS XE 17.x)", "url": "https://www.cisco.com/c/en/us/td/docs/routers/ios/config/17-x/ip-routing/b-ip-routing/m_iro-mode-ospfv2.html" },
+      { "label": "Jeremy's IT Lab - Free CCNA (playlist)", "url": "https://www.youtube.com/watch?v=H8W9oMNSuwo&list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ" }
+    ],
+    "packetTracerFile": "assets/pt/lab-3.4-001.pkt"
+  },
+  {
+    "id": "lab-4.1-001",
+    "domain": "4.0",
+    "subtopics": ["4.1"],
+    "title": "Configure inside source NAT overload (PAT)",
+    "type": "sim",
+    "topologyImage": "assets/topo/lab-4.1-001.svg",
+    "scenario": "R1 connects the inside LAN 192.168.1.0/24 (GigabitEthernet0/0) to the ISP through GigabitEthernet0/1 (203.0.113.2/30). Configure PAT (NAT overload) so all inside hosts share the outside interface address when reaching the internet.",
+    "startingConfigs": {
+      "R1": "hostname R1\ninterface g0/0\n ip address 192.168.1.1 255.255.255.0\n no shutdown\ninterface g0/1\n ip address 203.0.113.2 255.255.255.252\n no shutdown"
+    },
+    "tasks": [
+      { "id": 1, "text": "Mark G0/0 as 'ip nat inside' and G0/1 as 'ip nat outside'", "points": 20 },
+      { "id": 2, "text": "Create ACL 1 permitting 192.168.1.0/24", "points": 15 },
+      { "id": 3, "text": "Configure PAT (overload) using the outside interface", "points": 25 }
+    ],
+    "rubric": [
+      { "id": "r1", "text": "G0/0 marked ip nat inside", "points": 10, "verifyCmd": "show running-config interface g0/0", "verifyRegex": "ip nat inside" },
+      { "id": "r2", "text": "G0/1 marked ip nat outside", "points": 10, "verifyCmd": "show running-config interface g0/1", "verifyRegex": "ip nat outside" },
+      { "id": "r3", "text": "ACL 1 permits the inside subnet", "points": 10, "verifyCmd": "show running-config | include access-list 1", "verifyRegex": "access-list 1 permit 192\\.168\\.1\\.0 0\\.0\\.0\\.255" },
+      { "id": "r4", "text": "PAT overload statement present", "points": 10, "verifyCmd": "show running-config | include ip nat inside source", "verifyRegex": "ip nat inside source list 1 interface GigabitEthernet0/1 overload" }
+    ],
+    "solution": {
+      "config": {
+        "R1": "interface GigabitEthernet0/0\n ip nat inside\n!\ninterface GigabitEthernet0/1\n ip nat outside\n!\naccess-list 1 permit 192.168.1.0 0.0.0.255\nip nat inside source list 1 interface GigabitEthernet0/1 overload"
+      },
+      "explanation": "PAT (NAT overload) maps many inside local addresses to one inside global address by tracking unique source ports. The ACL selects which inside source addresses get translated. Verify with 'show ip nat translations' and 'show ip nat statistics'."
+    },
+    "references": [
+      { "label": "Cisco: NAT Configuration Guide (Catalyst 9000, IOS XE 17)", "url": "https://www.cisco.com/c/en/us/td/docs/switches/lan/c9000/lyr3-fwd/nat/nat-configuration-guide/nat.html" },
+      { "label": "Jeremy's IT Lab - Free CCNA (playlist)", "url": "https://www.youtube.com/watch?v=H8W9oMNSuwo&list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ" }
+    ],
+    "packetTracerFile": "assets/pt/lab-4.1-001.pkt"
+  },
+  {
+    "id": "lab-5.6-001",
+    "domain": "5.0",
+    "subtopics": ["5.6"],
+    "title": "Create and apply a named extended ACL",
+    "type": "sim",
+    "topologyImage": "assets/topo/lab-5.6-001.svg",
+    "scenario": "On R1, block host 192.168.1.10 from reaching the server subnet 10.0.0.0/24 over HTTP (TCP 80), while allowing all other traffic. Apply the policy inbound on G0/0, the interface facing 192.168.1.0/24.",
+    "startingConfigs": {
+      "R1": "hostname R1\ninterface g0/0\n ip address 192.168.1.1 255.255.255.0\n no shutdown\ninterface g0/1\n ip address 10.0.0.254 255.255.255.0\n no shutdown"
+    },
+    "tasks": [
+      { "id": 1, "text": "Create a named extended ACL called BLOCK_WEB", "points": 20 },
+      { "id": 2, "text": "Deny TCP from host 192.168.1.10 to 10.0.0.0/24 on port 80", "points": 25 },
+      { "id": 3, "text": "Permit all other IP traffic", "points": 10 },
+      { "id": 4, "text": "Apply the ACL inbound on G0/0", "points": 15 }
+    ],
+    "rubric": [
+      { "id": "r1", "text": "Deny rule for host to web server present", "points": 15, "verifyCmd": "show access-lists BLOCK_WEB", "verifyRegex": "deny tcp host 192\\.168\\.1\\.10 10\\.0\\.0\\.0 0\\.0\\.0\\.255 eq (80|www)" },
+      { "id": "r2", "text": "Permit ip any any present after the deny", "points": 10, "verifyCmd": "show access-lists BLOCK_WEB", "verifyRegex": "permit ip any any" },
+      { "id": "r3", "text": "ACL applied inbound on G0/0", "points": 10, "verifyCmd": "show running-config interface g0/0", "verifyRegex": "ip access-group BLOCK_WEB in" }
+    ],
+    "solution": {
+      "config": {
+        "R1": "ip access-list extended BLOCK_WEB\n deny tcp host 192.168.1.10 10.0.0.0 0.0.0.255 eq 80\n permit ip any any\n!\ninterface GigabitEthernet0/0\n ip access-group BLOCK_WEB in"
+      },
+      "explanation": "Extended ACLs match source, destination, protocol and port, and should be placed close to the source. Order matters: the specific deny must come before the broad permit. The implicit 'deny any' at the end of every ACL is why an explicit 'permit ip any any' is needed to allow the rest of the traffic."
+    },
+    "references": [
+      { "label": "Cisco: IP Access List Overview (Security Config Guide, IOS XE)", "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/sec_data_acl/configuration/xe-16-9/sec-data-acl-xe-16-9-book/sec-access-list-ov.html" },
+      { "label": "Jeremy's IT Lab - Free CCNA (playlist)", "url": "https://www.youtube.com/watch?v=H8W9oMNSuwo&list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ" }
+    ],
+    "packetTracerFile": "assets/pt/lab-5.6-001.pkt"
+  },
+  {
+    "id": "lab-6.7-001",
+    "domain": "6.0",
+    "subtopics": ["6.7", "6.5"],
+    "title": "Interpret a JSON response from a REST API (GET)",
+    "type": "simlet",
+    "scenario": "A network controller returned the JSON body below from a REST GET request. Read it and answer the tasks.\n\n{\n  \"hostname\": \"R1\",\n  \"interfaces\": [\n    { \"name\": \"GigabitEthernet0/0\", \"enabled\": true },\n    { \"name\": \"GigabitEthernet0/1\", \"enabled\": false }\n  ]\n}",
+    "tasks": [
+      { "id": 1, "text": "State the value of the 'hostname' key", "points": 20 },
+      { "id": 2, "text": "State how many objects are in the 'interfaces' array", "points": 20 },
+      { "id": 3, "text": "State the 'name' of the first interface object", "points": 20 }
+    ],
+    "rubric": [
+      { "id": "r1", "text": "hostname is R1", "points": 20 },
+      { "id": "r2", "text": "interfaces array has 2 items", "points": 20 },
+      { "id": "r3", "text": "first interface name is GigabitEthernet0/0", "points": 20 }
+    ],
+    "solution": {
+      "config": { "answers": "hostname = \"R1\"; interfaces array length = 2; interfaces[0].name = \"GigabitEthernet0/0\" (enabled true); interfaces[1].name = \"GigabitEthernet0/1\" (enabled false)" },
+      "explanation": "JSON objects use { } with \"key\": value pairs; arrays use [ ] and are zero-indexed. A REST 'Read' is an HTTP GET. RESTCONF returns YANG-modeled data encoded as JSON (or XML), which is exactly this kind of structure."
+    },
+    "references": [
+      { "label": "Cisco: RESTCONF Protocol (data encoding, IOS XE)", "url": "https://www.cisco.com/c/en/us/td/docs/ios-xml/ios/prog/configuration/1717/b_1717_programmability_cg/m_1717_prog_restconf.html" },
+      { "label": "Jeremy's IT Lab - Free CCNA (playlist)", "url": "https://www.youtube.com/watch?v=H8W9oMNSuwo&list=PLxbwE86jKRgMpuZuLBivzlM8s2Dk5lXBQ" }
+    ]
+  }
+]
