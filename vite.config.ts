@@ -37,6 +37,10 @@ export default defineConfig({
       }
     })
   ],
+  server: {
+    // Local dev: run `DATA_DIR=./.data node server/server.mjs` for sync.
+    proxy: { "/api": "http://localhost:3000" }
+  },
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),

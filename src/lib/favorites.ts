@@ -1,4 +1,5 @@
 import * as db from "@/data/db";
+import { schedulePush } from "@/lib/sync";
 
 const KEY = "favorites";
 
@@ -12,6 +13,7 @@ export async function toggleFavorite(questionId: string): Promise<string[]> {
     ? current.filter((id) => id !== questionId)
     : [...current, questionId];
   await db.setSetting(KEY, next);
+  schedulePush();
   return next;
 }
 

@@ -2,6 +2,7 @@ import { useState, useRef } from "react";
 import { AlertTriangle, Download, Upload, Trash2, LogOut, User as UserIcon } from "lucide-react";
 import { useProgress } from "@/state/ProgressContext";
 import { currentUser, logout } from "@/auth/auth";
+import { schedulePush } from "@/lib/sync";
 import * as db from "@/data/db";
 import type { ProgressExport } from "@/types";
 
@@ -39,6 +40,7 @@ export default function Settings() {
       }
       await db.importAll(data);
       await reload();
+      schedulePush(0);
       setStatus("Progress imported successfully.");
     } catch {
       setStatus("Import failed: invalid or corrupt file.");

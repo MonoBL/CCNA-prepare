@@ -5,3 +5,20 @@ services:
     restart: unless-stopped
     ports:
       - "9600:80"
+    depends_on:
+      - api
+
+  api:
+    image: node:20-alpine
+    container_name: ccna-pwa-api
+    restart: unless-stopped
+    command: node /srv/server.mjs
+    volumes:
+      - ./server:/srv:ro
+      - ccna-progress:/data
+    environment:
+      - PORT=3000
+      - DATA_DIR=/data
+
+volumes:
+  ccna-progress:

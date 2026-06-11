@@ -27,6 +27,7 @@ export const USERS: AppUser[] = [
 ];
 
 const SESSION_KEY = "ccna-user";
+const TOKEN_KEY = "ccna-token";
 
 async function sha256Hex(text: string): Promise<string> {
   const data = new TextEncoder().encode(text);
@@ -41,17 +42,24 @@ export function currentUser(): AppUser | null {
   return USERS.find((u) => u.id === id) ?? null;
 }
 
+/** Token sent to the sync API (the verified password hash). */
+export function authToken(): string | null {
+  return localStorage.getItem(TOKEN_KEY);
+}
+
 export async function login(userId: string, password: string): Promise<AppUser | null> {
   const user = USERS.find((u) => u.id === userId);
   if (!user) return null;
   const hash = await sha256Hex(password);
   if (hash !== user.passwordHash) return null;
   localStorage.setItem(SESSION_KEY, user.id);
+  localStorage.setItem(TOKEN_KEY, hash);
   return user;
 }
 
 export function logout(): void {
   localStorage.removeItem(SESSION_KEY);
+  localStorage.removeItem(TOKEN_KEY);
   // Reload so the cached IndexedDB connection and all in-memory
   // progress state are dropped before the next user signs in.
   window.location.assign("/");

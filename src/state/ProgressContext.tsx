@@ -13,6 +13,7 @@ import { weights } from "@/data/content";
 import { gradeItem } from "@/lib/grading";
 import { masteryByDomain, masteryBySubtopic, overallReadiness } from "@/lib/readiness";
 import { newCard, review, GRADE } from "@/lib/srs";
+import { pullAndMerge, schedulePush, flushPush } from "@/lib/sync";
 
 interface ProgressState {
   loading: boolean;
@@ -63,9 +64,19 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     (async () => {
+      // Local data first so the UI is usable immediately (and offline),
+      // then merge in the server copy from other devices.
       await reload();
       setLoading(false);
+      if (await pullAndMerge()) await reload();
     })();
+
+    // Don't lose a pending debounced push when the tab/app is closed.
+    const flush = () => {
+      if (document.visibilityState === "hidden") flushPush();
+    };
+    document.addEventListener("visibilitychange", flush);
+    return () => document.removeEventListener("visibilitychange", flush);
   }, []);
 
   async function recordAttempt(q: Question, answer: Answer, mode: Mode): Promise<number> {
@@ -91,20 +102,24 @@ export function ProgressProvider({ children }: { children: ReactNode }) {
       await db.putSrs(review(existing, scoreToGrade(score), Date.now()));
     }
     await reload();
+    schedulePush();
     return id;
   }
 
   async function addExamRun(r: ExamRun) {
     await db.addExamRun(r);
     await reload();
+    schedulePush();
   }
   async function addDiagnostic(d: DiagnosticRecord) {
     await db.addDiagnostic(d);
     await reload();
+    schedulePush();
   }
   async function reset() {
     await db.resetAll();
     await reload();
+    schedulePush(0); // clear the server copy too, immediately
   }
 
   const mDomain = useMemo(() => masteryByDomain(attempts), [attempts]);
