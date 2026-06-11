@@ -1,5 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { LayoutDashboard, BookOpen, ListChecks, Timer, RotateCw, Settings, Bookmark } from "lucide-react";
+import { LayoutDashboard, BookOpen, ListChecks, Timer, RotateCw, Settings, Bookmark, LogOut } from "lucide-react";
+import { currentUser, logout } from "@/auth/auth";
 
 const tabs = [
   { to: "/", label: "Home", icon: LayoutDashboard, end: true },
@@ -38,6 +39,15 @@ export default function Layout() {
           <NavLink to="/settings" aria-label="Settings" className="hover:text-slate-200">
             <Settings size={17} />
           </NavLink>
+          <button
+            onClick={logout}
+            aria-label={`Sign out ${currentUser()?.displayName ?? ""}`}
+            title={`Signed in as ${currentUser()?.displayName ?? ""}`}
+            className="flex items-center gap-1 hover:text-slate-200"
+          >
+            <span className="hidden sm:inline text-slate-500">{currentUser()?.displayName}</span>
+            <LogOut size={17} />
+          </button>
         </nav>
       </header>
 

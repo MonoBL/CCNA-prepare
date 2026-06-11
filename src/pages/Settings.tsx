@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
-import { AlertTriangle, Download, Upload, Trash2 } from "lucide-react";
+import { AlertTriangle, Download, Upload, Trash2, LogOut, User as UserIcon } from "lucide-react";
 import { useProgress } from "@/state/ProgressContext";
+import { currentUser, logout } from "@/auth/auth";
 import * as db from "@/data/db";
 import type { ProgressExport } from "@/types";
 
@@ -66,6 +67,25 @@ export default function Settings() {
           </button>
         </div>
       )}
+
+      <section className="space-y-3">
+        <h2 className="text-sm font-medium uppercase tracking-wide text-slate-400">Account</h2>
+        <div className="flex items-center justify-between rounded-lg border border-slate-700 bg-surface px-4 py-3 text-sm">
+          <div className="flex items-center gap-3">
+            <UserIcon size={16} className="shrink-0 text-accent" />
+            <div>
+              <div className="font-medium text-slate-200">{currentUser()?.displayName}</div>
+              <div className="text-xs text-slate-500">Progress is stored separately per user.</div>
+            </div>
+          </div>
+          <button
+            onClick={logout}
+            className="flex items-center gap-1.5 rounded-lg border border-slate-700 px-3 py-1.5 text-xs hover:border-slate-500 transition-colors"
+          >
+            <LogOut size={13} /> Sign out
+          </button>
+        </div>
+      </section>
 
       <section className="space-y-3">
         <h2 className="text-sm font-medium uppercase tracking-wide text-slate-400">Progress data</h2>

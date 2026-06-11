@@ -143,10 +143,10 @@ export const examInsights: Record<string, DomainInsight> = {
   },
   "6.0": {
     summary:
-      "Automation and Programmability covers REST APIs, JSON/YAML, Ansible/Puppet/Chef, Cisco DNA Center, and the difference between traditional CLI and controller-based networking. At 10% of the exam, expect more conceptual questions than hands-on config.",
+      "Automation and Programmability covers REST APIs, JSON, Ansible and Terraform, AI/ML in network operations, Cisco Catalyst Center (DNA Center), and the difference between traditional CLI and controller-based networking. At 10% of the exam, expect more conceptual questions than hands-on config.",
     questionTypes: [
       "Single-answer: identify HTTP method (GET/POST/PUT/DELETE/PATCH) for a given action",
-      "Single-answer: which tool uses push vs pull model",
+      "Single-answer: distinguish Ansible (configuration management) from Terraform (provisioning)",
       "Exhibit: read a JSON payload and identify a value",
       "Multi-select: correct statements about SDN or controller-based networking",
     ],
@@ -155,8 +155,9 @@ export const examInsights: Record<string, DomainInsight> = {
       "HTTP status codes: 200 OK, 201 Created, 400 Bad Request, 401 Unauthorized, 404 Not Found",
       "JSON structure: key-value pairs, arrays [], objects {}",
       "YANG data models and NETCONF/RESTCONF protocols",
-      "Ansible (agentless, YAML, push), Puppet (agent-based, pull), Chef (agent-based, pull)",
-      "Cisco DNA Center: intent-based networking, southbound/northbound APIs",
+      "Ansible (agentless, YAML playbooks, pushes config over SSH) vs Terraform (declarative provisioning, state file) - the two tools named in blueprint 6.6",
+      "AI in network operations: generative vs predictive AI, ML-driven analytics (blueprint 6.4, new in v1.1)",
+      "Cisco Catalyst Center (DNA Center): intent-based networking, southbound/northbound APIs",
       "SDN planes: data plane (forwarding), control plane (routing decisions), management plane",
       "Traditional vs controller-based: configuration pushed by controller, not per-device CLI",
     ],
@@ -164,7 +165,9 @@ export const examInsights: Record<string, DomainInsight> = {
       "REST APIs are stateless: each request contains all information needed; no session state kept.",
       "JSON is the dominant format for Cisco APIs; YAML is common for Ansible playbooks.",
       "Ansible is agentless - it uses SSH to push config, no agent installed on target devices.",
-      "DNA Center uses HTTPS REST to the northbound and protocols like NETCONF to the southbound.",
+      "Terraform is declarative infrastructure-as-code: you describe the desired end state and it provisions to match.",
+      "v1.1 dropped Puppet/Chef from the blueprint and added Terraform plus AI/ML (6.4) - study those, not the old tools.",
+      "Catalyst Center uses HTTPS REST to the northbound and protocols like NETCONF to the southbound.",
     ],
   },
 };

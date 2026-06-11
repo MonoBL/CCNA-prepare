@@ -1,5 +1,8 @@
 // IndexedDB layer (idb). Persists progress fully offline.
+// Each signed-in user gets their own database (see auth.ts dbName),
+// so progress never mixes between users.
 import { openDB, type DBSchema, type IDBPDatabase } from "idb";
+import { currentUser } from "@/auth/auth";
 import type {
   Attempt,
   SrsCard,
@@ -16,14 +19,16 @@ interface CcnaDB extends DBSchema {
   settings: { key: string; value: { key: string; value: unknown } };
 }
 
-const DB_NAME = "ccna-pwa";
 const DB_VERSION = 1;
 
 let dbp: Promise<IDBPDatabase<CcnaDB>> | null = null;
 
 function db(): Promise<IDBPDatabase<CcnaDB>> {
   if (!dbp) {
-    dbp = openDB<CcnaDB>(DB_NAME, DB_VERSION, {
+    // The login gate renders before any page touches the DB, so a user
+    // is always set here. Fall back to the original DB name just in case.
+    const dbName = currentUser()?.dbName ?? "ccna-pwa";
+    dbp = openDB<CcnaDB>(dbName, DB_VERSION, {
       upgrade(d) {
         const a = d.createObjectStore("attempts", { keyPath: "id", autoIncrement: true });
         a.createIndex("byQuestion", "questionId");

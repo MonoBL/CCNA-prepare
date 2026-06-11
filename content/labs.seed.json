@@ -16,7 +16,7 @@
     "rubric": [
       { "id": "r1", "text": "G0/0 has IPv4 10.1.1.1 255.255.255.0", "points": 20, "verifyCmd": "show running-config interface g0/0", "verifyRegex": "ip address 10\\.1\\.1\\.1 255\\.255\\.255\\.0" },
       { "id": "r2", "text": "G0/0 has IPv6 2001:db8:1::1/64", "points": 20, "verifyCmd": "show running-config interface g0/0", "verifyRegex": "(?i)ipv6 address 2001:db8:1::1/64" },
-      { "id": "r3", "text": "G0/0 line protocol is up (no shutdown)", "points": 10, "verifyCmd": "show ip interface brief", "verifyRegex": "GigabitEthernet0/0\\s+10\\.1\\.1\\.1\\s+\\S+\\s+up\\s+up" }
+      { "id": "r3", "text": "G0/0 line protocol is up (no shutdown)", "points": 10, "verifyCmd": "show ip interface brief", "verifyRegex": "GigabitEthernet0/0\\s+10\\.1\\.1\\.1\\s+YES\\s+\\S+\\s+up\\s+up" }
     ],
     "solution": {
       "config": { "R1": "interface GigabitEthernet0/0\n ip address 10.1.1.1 255.255.255.0\n ipv6 address 2001:DB8:1::1/64\n no shutdown" },
@@ -90,7 +90,7 @@
         "R1": "router ospf 1\n router-id 1.1.1.1\n network 10.0.0.0 0.0.0.3 area 0\n network 192.168.1.0 0.0.0.255 area 0",
         "R2": "router ospf 1\n router-id 2.2.2.2\n network 10.0.0.0 0.0.0.3 area 0\n network 192.168.2.0 0.0.0.255 area 0"
       },
-      "explanation": "OSPF network statements use wildcard masks (inverse of the subnet mask). Both routers must agree on area and on hello/dead timers. On a point-to-point link there is no DR/BDR election and the adjacency proceeds to FULL. Setting an explicit router-id avoids it changing if interfaces flap."
+      "explanation": "OSPF network statements use wildcard masks (inverse of the subnet mask). Both routers must agree on area and on hello/dead timers. Note: OSPF's default network type on Ethernet interfaces is broadcast, so a DR/BDR election still occurs on this two-router link; configure 'ip ospf network point-to-point' on both G0/0 interfaces to skip the election. Either way the adjacency reaches FULL. Setting an explicit router-id avoids it changing if interfaces flap."
     },
     "references": [
       { "label": "Cisco: Enabling OSPFv2 on an Interface (IP Routing, IOS XE 17.x)", "url": "https://www.cisco.com/c/en/us/td/docs/routers/ios/config/17-x/ip-routing/b-ip-routing/m_iro-mode-ospfv2.html" },
